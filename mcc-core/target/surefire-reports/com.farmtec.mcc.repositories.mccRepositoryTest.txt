@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.farmtec.mcc.repositories.mccRepositoryTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.237 s - in com.farmtec.mcc.repositories.mccRepositoryTest

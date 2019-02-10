@@ -1,0 +1,9 @@
+com/farmtec/mcc/service/impl/MccServiceImplTest.class
+com/farmtec/mcc/models/AtmegaTest.class
+com/farmtec/mcc/service/impl/TimerServiceImplTest.class
+com/farmtec/mcc/models/modules/timer/TimerTest.class
+com/farmtec/mcc/service/impl/AdcServiceImplTest.class
+com/farmtec/mcc/repositories/mccRepositoryTest.class
+com/farmtec/mcc/ApplicationTest.class
+com/farmtec/mcc/service/impl/PortnServiceImplTest.class
+com/farmtec/mcc/service/impl/TimerServiceImplH2Test.class

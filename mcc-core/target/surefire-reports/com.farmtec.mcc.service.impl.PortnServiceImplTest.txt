@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.farmtec.mcc.service.impl.PortnServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.386 s - in com.farmtec.mcc.service.impl.PortnServiceImplTest
