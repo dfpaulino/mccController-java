@@ -40,5 +40,4 @@ This will have a controller for
 # ###############################
 ATMEGA32
 ATMEGA16
-ATMEGA8 * 2020 only
 
