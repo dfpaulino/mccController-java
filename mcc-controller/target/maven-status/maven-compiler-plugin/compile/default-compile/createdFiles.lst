@@ -1,8 +1,0 @@
-com/farmtec/mcc/controller/TimerController.class
-com/farmtec/mcc/controller/AdcController.class
-com/farmtec/mcc/controller/PortnController.class
-com/farmtec/mcc/MccApplication.class
-com/farmtec/mcc/controller/MccControllerException.class
-com/farmtec/mcc/controller/MccController.class
-com/farmtec/mcc/controller/exception/ControllerExceptionHandler.class
-com/farmtec/mcc/controller/exception/ErrorResponse.class
