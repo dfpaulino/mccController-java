@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.farmtec.mcc.service.impl.AdcServiceImplTest
--------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.071 s - in com.farmtec.mcc.service.impl.AdcServiceImplTest

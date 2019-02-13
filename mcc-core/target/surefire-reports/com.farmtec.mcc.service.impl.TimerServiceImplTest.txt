@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.farmtec.mcc.service.impl.TimerServiceImplTest
--------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 3, Time elapsed: 0.452 s - in com.farmtec.mcc.service.impl.TimerServiceImplTest

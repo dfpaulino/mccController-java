@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.farmtec.mcc.service.impl.TimerServiceImplH2Test
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 3, Time elapsed: 8.427 s - in com.farmtec.mcc.service.impl.TimerServiceImplH2Test

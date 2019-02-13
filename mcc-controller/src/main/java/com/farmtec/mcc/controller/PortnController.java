@@ -28,16 +28,19 @@ public class PortnController {
     }
 
     @RequestMapping(value = "/{id}/value",method = RequestMethod.PUT,produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PORTnDto> updateAdcValue(@PathVariable(name = "id") int id, byte value)
+    public ResponseEntity<PORTnDto> updateAdcValue(@PathVariable(name = "id") int id, @RequestParam(name = "value") String strValue)
     {
+        byte value=(byte) (0xFF&Integer.valueOf(strValue,16));
 
         PORTn porTn=portnService.updateValue(id,value);
         return new ResponseEntity<PORTnDto>(MccEntityToDto.portEntityToPortDto(porTn), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/ddr",method = RequestMethod.PUT,produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PORTnDto> updateAdcDDR(@PathVariable(name = "id") int id, byte value)
+    public ResponseEntity<PORTnDto> updateAdcDDR(@PathVariable(name = "id") int id, @RequestParam(name = "value") String strValue)
     {
+        byte value=(byte) (0xFF&Integer.valueOf(strValue,16));
+
         PORTn porTn=portnService.updateDDR(id,value);
         return new ResponseEntity<PORTnDto>(MccEntityToDto.portEntityToPortDto(porTn), HttpStatus.OK);
     }
