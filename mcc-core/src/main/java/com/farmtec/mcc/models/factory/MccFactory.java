@@ -77,7 +77,7 @@ public class MccFactory {
         mcc.setAdcs(adcList);
 
         List<PORTn> IOPortList=new ArrayList<>();
-        String[] portNames= new String[]{"PortA","PORTB","PORTC","PORTD"};
+        String[] portNames= new String[]{"PORTA","PORTB","PORTC","PORTD"};
         for (String s:portNames)
         {
             PORTn port=new PORTn();
@@ -140,7 +140,7 @@ public class MccFactory {
         mcc.setAdcs(adcList);
 
         List<PORTn> IOPortList = new ArrayList<>();
-        String[] portNames = new String[]{"PortA", "PORTB", "PORTC", "PORTD"};
+        String[] portNames = new String[]{"PORTA", "PORTB", "PORTC", "PORTD"};
         for (String s : portNames) {
             PORTn port = new PORTn();
             port.setPortName(s);
