@@ -71,6 +71,7 @@ public class MccServiceImpl implements MccService {
     }
 
     @Override
+    @Transactional
     public boolean updateTimersByMcuId(int id, List<Timer> timers) throws MccServiceException {
 
         boolean result=false;
@@ -223,4 +224,16 @@ public class MccServiceImpl implements MccService {
     /*
     All methods should be Transactional as the repository is configuread as Lazy featch
      */
+
+    public void deleteMcc(int id)
+    {
+        try{
+            mccRepository.deleteById(id);
+
+        }catch (DataAccessException dae)
+        {
+            logger.error("Exception[ "+dae.getMessage()+"] stack trace:"+dae.getStackTrace().toString());
+
+        }
+    }
 }

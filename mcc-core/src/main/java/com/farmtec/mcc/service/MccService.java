@@ -38,4 +38,6 @@ public interface MccService {
     Atmega createMcu(Atmega atmega) throws MccServiceException;
     Atmega updateMcu(Atmega atmega) throws MccServiceException;
 
+    void deleteMcc(int id);
+
 }

@@ -68,5 +68,11 @@ public class MccController {
         return  new ResponseEntity<>(MccEntityToDto.mccEntityToDtoSimple(mcc),HttpStatus.OK);
     }
 
+    @RequestMapping(value="/{id}",method = RequestMethod.DELETE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void deleteMccById(@PathVariable("id") byte id)
+    {
+        mccService.deleteMcc(id);
+    }
 
 }
