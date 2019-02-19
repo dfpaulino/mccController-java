@@ -22,5 +22,97 @@
 
     </dependencies>
 
+    <build>
+        <plugins>
+            <!--plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.21.0</version>
+                <configuration>
+                    <skipTests>${skipUTs}</skipTests>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.21.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <skipITs>${skipITs}</skipITs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <phase>integration-test</phase>
+                        <configuration>
+                        </configuration>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.24.0</version>
+
+                <configuration>
+                    <verbose>true</verbose>
+                    <skip>${skipITs}</skip>
+                    <dockerHost>unix:///var/run/docker.sock</dockerHost>
+                    <images>
+                        <image>
+                            <name>${docker.image.mysql}</name>
+                            <alias>mysql_database</alias>
+                            <run>
+                                <env>
+                                    <MYSQL_ROOT_PASSWORD>${docker.image.mysql.root.password}</MYSQL_ROOT_PASSWORD>
+                                    <MYSQL_DATABASE>${docker.image.mysql.database}</MYSQL_DATABASE>
+                                    <MYSQL_USER>${docker.image.mysql.user}</MYSQL_USER>
+                                    <MYSQL_PASSWORD>${docker.image.mysql.password}</MYSQL_PASSWORD>
+                                </env>
+                                <ports>
+                                    <port>${docker.image.mysql.portmapping}</port>
+                                </ports>
+                                <wait>
+                                    <time>60000</time>
+                                </wait>
+                            </run>
+                        </image>
+
+                    </images>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>container-start</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>container-stop</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+
+        </plugins>
+
+    </build>
 
 </project>

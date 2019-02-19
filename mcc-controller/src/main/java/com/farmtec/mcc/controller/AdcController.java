@@ -33,7 +33,7 @@ public class AdcController {
     }
 
     @RequestMapping(value = "/{id}/updateFlag",method = RequestMethod.PUT,produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateTimer(@PathVariable(value = "id") int id,
+    public ResponseEntity<Void> updateAdc(@PathVariable(value = "id") int id,
                                             @RequestParam(value = "inUse") boolean inUse)
     {
         adcService.setInUseFlag(id,inUse);

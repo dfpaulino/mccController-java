@@ -29,7 +29,7 @@ public class TimerController {
     }
 
     @RequestMapping(value = "/{id}/updateFlag",method = RequestMethod.PUT,produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateTimer(@PathVariable(value = "id") int id,
+    public ResponseEntity<Void> updateTimerFlag(@PathVariable(value = "id") int id,
                                             @RequestParam(value = "inUse") boolean inUse)
     {
         timerService.setInUseFlag(id,inUse);
