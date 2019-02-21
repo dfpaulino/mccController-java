@@ -53,9 +53,6 @@ public class TimerControllerTest {
     @Autowired
     TimerController timerController;
 
-    @Autowired
-    MccService mccService;
-
     @Test
     public void contexLoads() throws Exception {
         assertThat(timerController).isNotNull();

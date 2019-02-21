@@ -29,12 +29,12 @@ public class PORTnDto extends BaseDto {
     @JsonGetter("value")
     public String value()
     {
-        return "0X"+Integer.toHexString(value & 0xFF);
+        return "0x"+Integer.toHexString(value & 0xFF);
     }
 
     @JsonGetter("ddb")
     public String ddb()
     {
-        return "0X"+Integer.toHexString(ddb & 0xFF);
+        return "0x"+Integer.toHexString(ddb & 0xFF);
     }
 }
