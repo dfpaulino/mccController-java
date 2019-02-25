@@ -15,6 +15,7 @@
         <module>mcc-parent</module>
         <module>mcc-core</module>
         <module>mcc-controller</module>
+        <module>mcc-socket</module>
     </modules>
 
 
