@@ -1,6 +1,6 @@
-package com.farmtec.mcc.ph;
+package com.farmtec.io.ph;
 
-import com.farmtec.mcc.handler.MessageHandlerService;
+import com.farmtec.io.handler.MessageHandlerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

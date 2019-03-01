@@ -1,4 +1,4 @@
-package com.farmtec.mcc.ph;
+package com.farmtec.io.ph;
 
 public enum ConnectionsStatus {
     ACTIVE(1),NOT_ACTIVE(-1);

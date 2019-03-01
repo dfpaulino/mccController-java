@@ -1,6 +1,6 @@
-package com.farmtec.mcc.handler;
+package com.farmtec.io.handler;
 
-import com.farmtec.mcc.message.Message;
+import com.farmtec.io.message.Message;
 
 public class MessageHandler implements  Runnable{
 

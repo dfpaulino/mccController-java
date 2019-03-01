@@ -7,6 +7,7 @@
     <name>mcc-socket</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <groupId>com.farmtec</groupId>
     <artifactId>mcc-socket</artifactId>
 
     <modelVersion>4.0.0</modelVersion>

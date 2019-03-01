@@ -1,6 +1,5 @@
-package com.farmtec.mcc.ph;
+package com.farmtec.io.ph;
 
-import com.farmtec.mcc.handler.MessageHandlerService;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
