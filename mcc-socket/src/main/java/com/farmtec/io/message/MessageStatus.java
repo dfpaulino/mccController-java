@@ -8,4 +8,5 @@ public enum MessageStatus {
     MessageStatus(int value) {
         this.value = value;
     }
+    int getValue(){return this.value;}
 }

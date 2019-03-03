@@ -4,20 +4,102 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 
-    <name>mcc-socket</name>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <groupId>com.farmtec</groupId>
-    <artifactId>mcc-socket</artifactId>
 
-    <modelVersion>4.0.0</modelVersion>
-
-    <parent>
+    <!--parent>
         <groupId>com.farmtec</groupId>
         <artifactId>mcc-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../mcc-parent</relativePath>
+    </parent-->
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.5.RELEASE</version>
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
+
+    <name>mcc-socket</name>
+    <version>1.0-SNAPSHOT</version>
+    <groupId>com.farmtec</groupId>
+    <artifactId>mcc-socket</artifactId>
+    <packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
+
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+
+        <skipUTs>false</skipUTs>
+        <skipITs>true</skipITs>
+
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.12</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+    <plugins>
+    <!--plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+    </plugin-->
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.21.0</version>
+        <configuration>
+            <skipTests>${skipUTs}</skipTests>
+        </configuration>
+    </plugin>
+
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.21.0</version>
+        <configuration>
+            <encoding>UTF-8</encoding>
+            <skipITs>${skipITs}</skipITs>
+        </configuration>
+        <executions>
+            <execution>
+                <id>integration-test</id>
+                <phase>integration-test</phase>
+                <configuration>
+                </configuration>
+                <goals>
+                    <goal>verify</goal>
+                </goals>
+            </execution>
+        </executions>
+    </plugin>
+    </plugins>
+    </build>
+
 
 
 </project>

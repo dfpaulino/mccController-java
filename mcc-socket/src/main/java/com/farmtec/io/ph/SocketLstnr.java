@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 
 @Component
 @NoArgsConstructor
@@ -20,9 +20,9 @@ public class SocketLstnr implements Runnable{
 
     Logger logger = LoggerFactory.getLogger(SocketLstnr.class);
 
-    @Value("${service.PORT}")
+    @Value("${io.service.port}")
     private int PORT;
-    @Value("${service.address:0.0.0.0}")
+    @Value("${io.service.address:0.0.0.0}")
     private String IP_ADDR;
 
     @Autowired
@@ -31,14 +31,16 @@ public class SocketLstnr implements Runnable{
     /*my socket*/
     private ServerSocket serverSocket;
 
-
-    public void init(){}
+    @PostConstruct
+    public void init(){this.startServer();}
 
     public void close(){}
 
 
     public void startServer()
     {
+        logger.info("Starting server "+PORT +" ... ");
+        System.out.println("Starting server "+PORT +" ... ");
         try{
             serverSocket = new ServerSocket(PORT,50, InetAddress.getByName(IP_ADDR));
         }catch (IOException ioe)

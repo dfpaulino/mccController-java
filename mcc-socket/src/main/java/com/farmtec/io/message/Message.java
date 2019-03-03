@@ -53,6 +53,6 @@ public abstract class Message {
     @Override
     public abstract  String toString();
     public abstract Map<String,byte[]> decodeToMap();
-    public  abstract int addBytes(byte[] inBytes,int srcStartPost);
+    public  abstract int addBytes(byte[] inBytes,int bytesRead,int srcStartPost);
 
 }

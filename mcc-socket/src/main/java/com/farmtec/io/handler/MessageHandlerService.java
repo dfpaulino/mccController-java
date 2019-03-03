@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -23,6 +24,7 @@ public class MessageHandlerService{
     private Map<String,Handler> messageHandlersRegister=new ConcurrentHashMap<String, Handler>(1);
     private ExecutorService mesageHandlerPool;
 
+    @PostConstruct
     public void init(){
         logger.info("Initiating bean "+this.getClass().getName());
         mesageHandlerPool= Executors.newFixedThreadPool(POOL_SIZE);

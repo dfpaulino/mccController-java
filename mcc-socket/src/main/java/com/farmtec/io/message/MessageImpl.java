@@ -48,8 +48,17 @@ public class MessageImpl extends Message {
         return null;
     }
 
+    /**
+     *
+     * @param inBytes: bufferArray
+     * @param bytesRead : bytes read into the bufferArray
+     * @param srcStartPost: offset. position to start reading bytes
+     * @return next readable position from bufferArray
+     * -1: array was 100% read
+     * >0 array was not fully read...iterate again on srcStartPos
+     */
     @Override
-    public int addBytes(byte[] inBytes, int srcStartPost) {
+    public int addBytes(byte[] inBytes,int bytesRead, int srcStartPost) {
 
         int returnNextReadPosition=0;
         //Starting a message
@@ -57,11 +66,12 @@ public class MessageImpl extends Message {
             //beginning of new packet
             if (0x01 == inBytes[srcStartPost]) {
 
-                int bytesAvailable = inBytes.length - srcStartPost ;
+                int bytesAvailable = bytesRead - srcStartPost ;
 
                 if (bytesAvailable < 3) {
                     //not enough info to create the buffer...lets wait for more bytes...
                     System.arraycopy(inBytes, srcStartPost, tmp, 0, bytesAvailable);
+                    this.messageStatus=MessageStatus.INCOMPLETE;
                     returnNextReadPosition=-1;
                     return -1;
                 }else {
@@ -107,11 +117,11 @@ public class MessageImpl extends Message {
                         this.buffer[1]=tmp[1];
                         int dstPos=2;
                         System.arraycopy(inBytes, srcStartPost, this.buffer, dstPos, (packetLength-2));
-                        if(inBytes.length==(packetLength-2)){
+                        if(bytesRead==(packetLength-2)){
                             this.messageStatus=MessageStatus.COMPLETE;
                             returnNextReadPosition=-1;
                             return -1;
-                        }else if (inBytes.length>(packetLength-2)){
+                        }else if (bytesRead>(packetLength-2)){
                             this.messageStatus=MessageStatus.COMPLETE_EXCEDED;
                             returnNextReadPosition=srcStartPost+(packetLength-2);
                             return srcStartPost+(packetLength-2);
@@ -120,15 +130,16 @@ public class MessageImpl extends Message {
                     }else{
                         System.out.println(this.getClass().getName()+": scenario 1.2!!");
                         packetLength = (int) inBytes[srcStartPost+1];
+                        this.length=packetLength;
                         this.buffer = new byte[packetLength];
                         this.buffer[0]=tmp[0];
                         int dstPos=1;
                         System.arraycopy(inBytes, srcStartPost, this.buffer, dstPos, packetLength-1);
-                        if(inBytes.length==(packetLength-1)){
+                        if(bytesRead==(packetLength-1)){
                             this.messageStatus=MessageStatus.COMPLETE;
                             returnNextReadPosition=-1;
                             return -1;
-                        }else if (inBytes.length>(packetLength-1)){
+                        }else if (bytesRead>(packetLength-1)){
                             this.messageStatus=MessageStatus.COMPLETE_EXCEDED;
                             returnNextReadPosition=srcStartPost+(packetLength-1);
                             return srcStartPost+(packetLength-1);
@@ -145,11 +156,11 @@ public class MessageImpl extends Message {
             //need to read 4
             int bytsToCompletepack=this.length-nextAvailablePosInBufer;
             System.arraycopy(inBytes, srcStartPost, this.buffer, nextAvailablePosInBufer, bytsToCompletepack);
-            if(inBytes.length==bytsToCompletepack){
+            if(bytesRead==bytsToCompletepack){
                 this.messageStatus=MessageStatus.COMPLETE;
                 returnNextReadPosition=-1;
                 return -1;
-            }else if(inBytes.length>bytsToCompletepack){
+            }else if(bytesRead>bytsToCompletepack){
                 this.messageStatus=MessageStatus.COMPLETE_EXCEDED;
                 returnNextReadPosition=srcStartPost+bytsToCompletepack;
                 return srcStartPost+bytsToCompletepack;

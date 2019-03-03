@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -21,8 +22,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class ConnectionManager implements  Runnable{
     Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
 
-    @Value("${service.max.connections:5}")
+    @Value("${io.service.max.connections:5}")
      int MAX_CNX;
+    @Value("${io.service.connection.monitor.poll.interval:5000}")
+    int CNX_MONITOR_POLL_INTERVAL;
+
 
     @Autowired
     MessageHandlerService messageHandlerService;
@@ -43,8 +47,9 @@ public class ConnectionManager implements  Runnable{
     private ExecutorService connectionManagerExecutorService;
 
     //Bean initialization
+    @PostConstruct
     public void init(){
-        connectionManagerExecutorService = Executors.newFixedThreadPool(MAX_CNX);
+        connectionManagerExecutorService = Executors.newFixedThreadPool(MAX_CNX+2);
         this.submitTaskToPool(this);
     }
     //Bean destroy
@@ -58,36 +63,43 @@ public class ConnectionManager implements  Runnable{
 
     public void createClientSocket(Socket clientSock) throws IOException
     {
-
         logger.info("Processing connection for client "+clientSock.getInetAddress().toString());
 
         if (connectionManagerExecutorService instanceof ThreadPoolExecutor) {
             int currentActiveThr=((ThreadPoolExecutor) connectionManagerExecutorService).getActiveCount();
-            if(currentActiveThr==(MAX_CNX+2)){
+            logger.info("current Threads in connection-pool is =>"+ currentActiveThr+"");
+            if(connectionArrayList.size()>=MAX_CNX){
                 logger.error("Cant accept more connections...MAX CONNECTIONS reached");
             }else{
                 Connection connection= new Connection(clientSock,messageHandlerService);
                 if(connectionArrayList.add(connection))
                 {
                     logger.info("connection sucessfully created for client "+clientSock.getInetAddress().toString());
+                    connectionManagerExecutorService.execute(connection);
                 }
-                connectionManagerExecutorService.execute(connection);
             }
         }
     }
 
     public void monitorConnectionList()
     {
-        for (int i = 0; i< connectionArrayList.size(); i++) {
-            if (ConnectionsStatus.ACTIVE != connectionArrayList.get(i).getConnectionsStatus()) {
-                logger.warn("removing connection client ["+connectionArrayList.get(i).getClientSocket().toString()+"]from list");
-                connectionArrayList.remove(i);
+        if(connectionArrayList.size()>0) {
+            for (int i = 0; i < connectionArrayList.size(); i++) {
+                if (ConnectionsStatus.ACTIVE != connectionArrayList.get(i).getConnectionsStatus()) {
+                    logger.warn("removing connection client [" + connectionArrayList.get(i).getClientSocket().toString() + "]from list");
 
-                /**
-                 * TODO
-                 * gather info for stats!!
-                 */
+                    connectionArrayList.remove(i);
+
+                    /**
+                     * TODO
+                     * gather info for stats!!
+                     */
+                } else {
+                    logger.info("connection " + connectionArrayList.get(i).getClientSocket().toString() + " still active");
+                }
             }
+        }else{
+            logger.warn("No connections available..." );
         }
 
     }
@@ -95,8 +107,11 @@ public class ConnectionManager implements  Runnable{
     @Override
     public void run() {
         try {
-            Thread.sleep(10000);
-            monitorConnectionList();
+            while (true){
+                Thread.sleep(CNX_MONITOR_POLL_INTERVAL);
+                logger.info("Monitoring Task kicking in...");
+                monitorConnectionList();
+            }
         }catch (Exception e){
 
         }
