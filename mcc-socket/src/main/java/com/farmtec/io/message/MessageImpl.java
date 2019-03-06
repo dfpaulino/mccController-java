@@ -1,7 +1,10 @@
 package com.farmtec.io.message;
 
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Packet :
@@ -23,12 +26,16 @@ import java.util.Map;
  * 0x8e  -> ADC4  (read only) (1 byte)
  * 0x8f  -> ADC5  (read only) (1 byte)
  * 0x90  -> ADC6  (read only) (1 byte)
- * 0x9a  -> ADC7  (read only) (1 byte)
+ * 0x91  -> ADC7  (read only) (1 byte)
  * 0x00  -> END of Packet
  */
 public class MessageImpl extends Message {
 
     private static final byte PROTO = 0x01;
+
+    private  Map<Integer,String> tagDecoder=new HashMap<Integer,String>();
+    private Map<String,Integer> decodedMessage;
+
 
     private byte[] tmp = new byte[] {0x00,0x00};
 
@@ -40,13 +47,45 @@ public class MessageImpl extends Message {
 
     @Override
     public String toString() {
-        return null;
+        return this.decodedMessage.toString();
     }
 
-    @Override
-    public Map<String, byte[]> decodeToMap() {
-        return null;
+
+    private void loadTagDecoderMap(){
+        tagDecoder = Stream.of(new Object[][] {
+                { "length", 0x80 },{ "operation",0x81 },
+                { "address",0x82 },{ "timer0",0x83 },
+                { "timer1",0x84 },{ "timer2",0x85 },
+                { "portA",0x86 },{ "portB",0x87 },
+                { "portC",0x88 },{ "portD",0x89 },
+                { "adc0",0x8a },{ "adc1",0x8b },
+                { "adc2",0x8c },{ "adc3",0x8d },
+                { "adc4",0x8e },{ "adc5",0x8f },
+                { "adc6",0x90 },{ "adc7",0x91 },
+        }).collect(Collectors.toMap((data -> (Integer) data[1]), (data -> (String) data[0])));
     }
+    /**
+     *
+     * @return
+     * Map<String,int>
+     *     where String is the tagName
+     *     The int is a byte...just for seeing future cases where fields can be > 256
+     */
+    @Override
+    public Map<String, Integer> decodeToMap() {
+        if (this.tagDecoder==null||this.tagDecoder.size()==0){
+            this.loadTagDecoderMap();
+        }
+        if(null==this.decodedMessage){
+            this.decodedMessage=new HashMap<String,Integer>();
+        }
+        for (int i=1;i<this.buffer.length-2;i=i+2){
+            if(tagDecoder.containsKey(Integer.valueOf(0xff&this.buffer[i])))
+                this.decodedMessage.put(tagDecoder.get(Integer.valueOf(0xff&this.buffer[i])),Integer.valueOf(0xff&this.buffer[i+1]));
+        }
+        return this.decodedMessage;
+    }
+
 
     /**
      *

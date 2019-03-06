@@ -50,9 +50,8 @@ public abstract class Message {
         return messageStatus;
     }
 
-    @Override
-    public abstract  String toString();
-    public abstract Map<String,byte[]> decodeToMap();
+
+    public abstract Map<String,Integer> decodeToMap();
     public  abstract int addBytes(byte[] inBytes,int bytesRead,int srcStartPost);
 
 }

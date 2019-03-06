@@ -3,6 +3,8 @@ package com.farmtec.io.message;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 public class MessageImplTest {
@@ -90,9 +92,6 @@ public class MessageImplTest {
 
 
 
-    }
-    //@Test
-    public void decodeToMap() {
     }
 
     @Test
@@ -212,5 +211,28 @@ public class MessageImplTest {
         assertEquals(MessageStatus.COMPLETE.getValue(),packet2.getMessageStatus().getValue());
         assertEquals(12,packet2.getLength());
         assertEquals(0x00,packet2.getBytes()[11]);
+    }
+
+    @Test
+    public void decodeToMap1() {
+        int nextPos=0;
+        Message packet1=new MessageImpl(null);
+        nextPos=packet1.addBytes(buffer1,buffer1.length,nextPos);
+        assertEquals(18,nextPos);
+        assertEquals(MessageStatus.COMPLETE_EXCEDED.getValue(),packet1.getMessageStatus().getValue());
+
+        Message packet2=new MessageImpl(null);
+        nextPos=packet2.addBytes(buffer1,buffer1.length,nextPos);
+        assertEquals(-1,nextPos);
+        assertEquals(MessageStatus.COMPLETE.getValue(),packet2.getMessageStatus().getValue());
+
+        Map<String,Integer> message1Decoded=packet1.decodeToMap();
+
+
+        Map<String,Integer> message2Decoded=packet2.decodeToMap();
+
+        System.out.println(packet1.toString());
+
+        assertEquals(250,(0xff&message1Decoded.get("timer0")));
     }
 }
