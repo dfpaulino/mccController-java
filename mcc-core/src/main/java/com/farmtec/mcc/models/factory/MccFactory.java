@@ -51,7 +51,7 @@ public class MccFactory {
         Timer t3=new Timer();
         t3.setInUse(true);
         t3.setMode(TimerMode.FAST_PWM);
-        t3.setName("timer3");
+        t3.setName("timer2");
         t3.setOutPutCompareRegister(128);
 
         t1.setAtmega(mcc);
@@ -77,7 +77,7 @@ public class MccFactory {
         mcc.setAdcs(adcList);
 
         List<PORTn> IOPortList=new ArrayList<>();
-        String[] portNames= new String[]{"PORTA","PORTB","PORTC","PORTD"};
+        String[] portNames= new String[]{"portA","portB","portC","portD"};
         for (String s:portNames)
         {
             PORTn port=new PORTn();
@@ -140,7 +140,7 @@ public class MccFactory {
         mcc.setAdcs(adcList);
 
         List<PORTn> IOPortList = new ArrayList<>();
-        String[] portNames = new String[]{"PORTA", "PORTB", "PORTC", "PORTD"};
+        String[] portNames= new String[]{"portA","portB","portC","portD"};
         for (String s : portNames) {
             PORTn port = new PORTn();
             port.setPortName(s);

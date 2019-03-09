@@ -129,39 +129,39 @@ into
 
  --#######################################
 
---PORTA
+--portA
 -- ID 13
    insert
        into
            portn
            (created_at, updated_at, atmega_id, ddb, port_name, value, id,in_use)
        values
-           (CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), (select id from atmega where address='0xFFFF'), 0, 'PORTA', 0, NEXTVAL('hibernate_sequence'),true)      ;
+           (CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), (select id from atmega where address='0xFFFF'), 0, 'portA', 0, NEXTVAL('hibernate_sequence'),true)      ;
 
---PORTB
+--portB
 -- ID 14
    insert
        into
            portn
            (created_at, updated_at, atmega_id, ddb, port_name, value, id,in_use)
        values
-           (CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), (select id from atmega where address='0xFFFF'), 0, 'PORTB', 0, NEXTVAL('hibernate_sequence'),false);
+           (CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), (select id from atmega where address='0xFFFF'), 0, 'portB', 0, NEXTVAL('hibernate_sequence'),false);
 
-   --PORTC
+   --portC
    -- ID 15
       insert
           into
               portn
               (created_at, updated_at, atmega_id, ddb, port_name, value, id,in_use)
           values
-              (CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), (select id from atmega where address='0xFFFF'), 0, 'PORTC', 0, NEXTVAL('hibernate_sequence'),true);
+              (CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), (select id from atmega where address='0xFFFF'), 0, 'portC', 0, NEXTVAL('hibernate_sequence'),true);
 
-   --PORTD
+   --portD
    -- ID 16
       insert
           into
               portn
               (created_at, updated_at, atmega_id, ddb, port_name, value, id,in_use)
           values
-              (CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), (select id from atmega where address='0xFFFF'), 0, 'PORTD', 0, NEXTVAL('hibernate_sequence'),true)
+              (CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), (select id from atmega where address='0xFFFF'), 0, 'portD', 0, NEXTVAL('hibernate_sequence'),true)
 

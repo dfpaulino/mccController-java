@@ -39,6 +39,23 @@ public class MccServiceImpl implements MccService {
     }
 
     @Override
+    public Atmega getMcuDetailsByAddress(String addr) {
+        Atmega mccRepo=mccRepository.findByAddress(addr);
+        if(null!=mccRepo) {
+
+            //gto force fetch of modules under this transaction
+            int numberOfTimers=mccRepo.getTimers().size();
+            int numberOfADCs=mccRepo.getAdcs().size();
+            int numberOfPORTs=mccRepo.getIoPort().size();
+
+            if(logger.isDebugEnabled()) {
+                logger.debug("Atmega ID["+mccRepo.getId()+"] found. Timers ["+numberOfTimers+"] ADC's ["+numberOfADCs+"] PORTS ["+numberOfPORTs+"]");
+            }
+        }
+        return mccRepo;
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Atmega getMcuDetailsById(int id) {
 
@@ -57,10 +74,7 @@ public class MccServiceImpl implements MccService {
             if(logger.isDebugEnabled()) {
                 logger.debug("Atmega ID["+id+"] found. Timers ["+numberOfTimers+"] ADC's ["+numberOfADCs+"] PORTS ["+numberOfPORTs+"]");
             }
-
-
         }
-
          return mccRepo;
     }
 

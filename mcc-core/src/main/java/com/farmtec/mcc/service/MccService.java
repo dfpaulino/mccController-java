@@ -20,6 +20,7 @@ public interface MccService {
     This is the complete data
      */
     Atmega getMcuDetailsById(int id);
+    Atmega getMcuDetailsByAddress(String addr);
 
     List<Timer> getTimersInfoByMcuId(int id);
     boolean updateTimersByMcuId(int id,List<Timer> timers)throws MccServiceException;
