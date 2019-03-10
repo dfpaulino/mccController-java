@@ -12,10 +12,10 @@ public abstract class Message {
     protected MessageStatus messageStatus;
     /**
      * TODO
-     * for now only process updates
+     * for now only process reportUpdate
      * updates are requests from the MCU providing update
      */
-    private String service="update";
+    private String service="reportUpdate";
 
     //with this content
     protected int length;
