@@ -77,6 +77,7 @@ public class ServiceIO extends BasicHandler {
                         }
                         AdcDto adcDto=new AdcDto();
                         adcDto.setId(adc.getId());
+                        adcDto.setAdcId(adc.getAdcId());
                         adcDto.setValue(decodedMessage.get(key));
                         adcService.updateAcd(adcDto);
                     }
