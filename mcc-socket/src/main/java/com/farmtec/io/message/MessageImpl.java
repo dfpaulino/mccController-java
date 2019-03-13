@@ -47,6 +47,10 @@ public class MessageImpl extends Message {
 
     @Override
     public String toString() {
+        if(decodedMessage==null)
+        {
+            decodeToMap();
+        }
         return this.decodedMessage.toString();
     }
 

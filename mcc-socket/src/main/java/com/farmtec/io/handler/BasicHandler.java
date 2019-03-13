@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 public class BasicHandler implements  Handler {
 
-    Logger logger = LoggerFactory.getLogger(MessageHandlerService.class);
+    Logger logger = LoggerFactory.getLogger(BasicHandler.class);
 
     @Override
     public void execute(Message msg) {

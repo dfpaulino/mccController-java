@@ -14,8 +14,8 @@ import java.util.concurrent.*;
 public class MessageHandlerService{
 
     Logger logger = LoggerFactory.getLogger(MessageHandlerService.class);
-    @Value("${service.message.handler.pool.size:2}")
-    private int POOL_SIZE;
+    @Value("${io.service.message.handler.pool.size:2}")
+    int POOL_SIZE;
 
     /**
      * My MessageHandlers will process the Message
@@ -50,7 +50,7 @@ public class MessageHandlerService{
             handler=messageHandlersRegister.get("defaultHandler");
         }
         MessageHandler messageHandler=new MessageHandler(handler,message);
-
+        this.mesageHandlerPool.execute(messageHandler);
 
         return true;
     }

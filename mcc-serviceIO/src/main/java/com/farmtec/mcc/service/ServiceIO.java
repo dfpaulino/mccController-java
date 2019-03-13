@@ -20,7 +20,7 @@ import java.util.Map;
 
 @NoArgsConstructor
 public class ServiceIO extends BasicHandler {
-    Logger logger = LoggerFactory.getLogger(MessageHandlerService.class);
+    Logger logger = LoggerFactory.getLogger(ServiceIO.class);
 
     @Autowired
     MccService mccService;
