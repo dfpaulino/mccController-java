@@ -5,21 +5,19 @@ import com.farmtec.io.message.Message;
 import com.farmtec.io.message.MessageImpl;
 import com.farmtec.io.message.MessageStatus;
 import com.farmtec.mcc.config.ServiceIOConfig;
+import com.farmtec.mcc.dto.modules.AtmegaDto;
+import com.farmtec.mcc.dto.modules.TimerDto;
 import com.farmtec.mcc.models.Atmega;
 import com.farmtec.mcc.models.AtmegaType;
 import com.farmtec.mcc.models.factory.MccFactory;
 import com.farmtec.mcc.models.modules.IO.PORTn;
 import com.farmtec.mcc.models.modules.adc.ADC;
 import com.farmtec.mcc.models.modules.timer.Timer;
-import com.farmtec.mcc.repositories.AdcRepository;
-import com.farmtec.mcc.repositories.TimerRepository;
-import com.farmtec.mcc.repositories.config.RepoConfig;
 import com.farmtec.mcc.utils.Util;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Rollback;
@@ -28,6 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -37,7 +36,7 @@ import static org.junit.Assert.*;
 //@EnableAutoConfiguration
 @RunWith(SpringRunner.class)
 //@DataJpaTest
-@SpringBootTest(classes = ServiceIO.class)
+@SpringBootTest(classes = ServiceIoReceiver.class)
 @EnableTransactionManagement
 @TestPropertySource("classpath:application.properties")
 //@Import({RepoConfig.class, ServiceIOConfig.class})
@@ -49,7 +48,10 @@ public class ServiceIOTest {
     MccService mccService;
 
     @Autowired
-    ServiceIO serviceIO;
+    ServiceIoReceiver serviceIoReceiver;
+
+    @Autowired
+    ServiceIoSender serviceIoSender;
 
 
     byte[] message=new byte[]{0x01,};
@@ -60,10 +62,24 @@ public class ServiceIOTest {
     }
 
     @Test
+    public void sendMessage()
+    {
+        AtmegaDto mccDto=new AtmegaDto();
+        mccDto.setAddress("0a");
+        List<TimerDto> timers=new ArrayList<TimerDto>();
+        TimerDto timer=new TimerDto();
+        timer.setName("timer0");
+        timer.setOutPutCompareRegister(0x80);
+        timers.add(timer);
+        mccDto.setTimers(timers);
+        serviceIoSender.sendMessage(mccDto,Operation.UpdateMcu);
+    }
+
+    @Test
     public void execute() {
         create2Mcu();
         Message msg=buildMessage("0a");
-        serviceIO.execute(msg);
+        serviceIoReceiver.execute(msg);
 
         assertEquals(MessageStatus.COMPLETE,msg.getMessageStatus());
         /*Lets validate some value...

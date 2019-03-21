@@ -59,6 +59,8 @@ public class ConnectionManager implements  Runnable{
         connectionArrayList.clear();
     }
 
+    public List<Connection> getConnectionList(){return this.connectionArrayList;}
+
     public void submitTaskToPool(Runnable task){this.connectionManagerExecutorService.execute(task);}
 
     public void createClientSocket(Socket clientSock) throws IOException

@@ -1,7 +1,6 @@
 package com.farmtec.mcc.service;
 
 import com.farmtec.io.handler.BasicHandler;
-import com.farmtec.io.handler.MessageHandlerService;
 import com.farmtec.io.message.Message;
 import com.farmtec.mcc.dto.modules.AdcDto;
 import com.farmtec.mcc.dto.modules.TimerDto;
@@ -19,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor
-public class ServiceIO extends BasicHandler {
-    Logger logger = LoggerFactory.getLogger(ServiceIO.class);
+public class ServiceIoReceiver extends BasicHandler {
+    Logger logger = LoggerFactory.getLogger(ServiceIoReceiver.class);
 
     @Autowired
     MccService mccService;

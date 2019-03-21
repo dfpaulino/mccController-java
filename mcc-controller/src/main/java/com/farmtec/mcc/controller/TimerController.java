@@ -1,6 +1,7 @@
 package com.farmtec.mcc.controller;
 
 import com.farmtec.mcc.models.modules.timer.Timer;
+import com.farmtec.mcc.service.ServiceIoSender;
 import com.farmtec.mcc.service.TimerService;
 import com.farmtec.mcc.dto.modules.TimerDto;
 import com.farmtec.mcc.dto.utils.MccEntityToDto;
@@ -18,6 +19,9 @@ public class TimerController {
 
     @Autowired
     TimerService timerService;
+
+    @Autowired
+    ServiceIoSender serviceIoSender;
 
 
 

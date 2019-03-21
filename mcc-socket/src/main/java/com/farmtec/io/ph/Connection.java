@@ -70,6 +70,23 @@ public class Connection implements Runnable
         return bytesOut;
     }
 
+    public synchronized boolean  send(byte[] buffer){
+        if(logger.isDebugEnabled())
+            logger.debug("Sending bytes to socket ["+this.clientSocket.toString()+"]");
+        if(logger.isTraceEnabled())
+            logger.trace("Sending ["+buffer);
+        try{
+            this.out.write(buffer);
+            this.out.flush();
+            this.bytesOut=+buffer.length;
+            return true;
+        }catch (IOException ioe){
+            logger.error("Error sending mesage to "+clientSocket.toString()+" Terminating connection...");
+            this.connectionsStatus=ConnectionsStatus.NOT_ACTIVE;
+        }
+        return false;
+    }
+
     @Override
     public void run() {
         logger.info("Connection ["+this.clientSocket.toString()+"] starting to process incoming packets...");
