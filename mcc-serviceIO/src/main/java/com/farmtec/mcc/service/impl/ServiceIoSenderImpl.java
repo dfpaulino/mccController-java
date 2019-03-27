@@ -5,6 +5,8 @@ import com.farmtec.io.message.Message;
 import com.farmtec.io.message.MessageEncoder;
 
 import com.farmtec.mcc.dto.modules.AtmegaDto;
+import com.farmtec.mcc.dto.modules.PORTnDto;
+import com.farmtec.mcc.dto.modules.TimerDto;
 import com.farmtec.mcc.service.MccIpAddressResolver;
 import com.farmtec.mcc.service.Operation;
 import com.farmtec.mcc.service.ServiceIoSender;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,14 +38,51 @@ public class ServiceIoSenderImpl implements ServiceIoSender {
         String ipAddr=null;
         if(null!=(ipAddr=mccIpAddressResolver.getIpForMccAdr(mccDto.getAddress())))
         {
-            Map<String,Integer> map =new HashMap<String,Integer>();
+            Map<String,Integer> map =encodeMcuToTagValue(mccDto);
             Message frame=new MessageEncoder(null);
 
             frame.encodeMessage(Byte.valueOf(mccDto.getAddress(),16),Operation.UpdateMcu.getValue(),map);
-            logger.debug("Sending message");
+            logger.debug("Sending message ["+((MessageEncoder) frame).printBuffer()+"]");
             return messageSenderService.sendMessage(frame,ipAddr);
         }else{
             return false;
         }
+    }
+
+    private Map<String,Integer> encodeMcuToTagValue(AtmegaDto mccDto){
+        /**
+         * From the design the name of the components match the message tagName
+         */
+        /**
+         *
+         *  protected void loadTagEncoderMap(){
+         *         tagEncoder = Stream.of(new Object[][] {
+         *                 { "length", 0x80 },{ "operation",0x81 },
+         *                 { "address",0x82 },{ "timer0",0x83 },
+         *                 { "timer1",0x84 },{ "timer2",0x85 },
+         *                 { "portA",0x86 },{ "portB",0x87 },
+         *                 { "portC",0x88 },{ "portD",0x89 },
+         *                 { "adc0",0x8a },{ "adc1",0x8b },
+         *                 { "adc2",0x8c },{ "adc3",0x8d },
+         *                 { "adc4",0x8e },{ "adc5",0x8f },
+         *                 { "adc6",0x90 },{ "adc7",0x91 },
+         */
+        Map<String,Integer> map =new HashMap<String,Integer>();
+        //loop timers
+        if(null!=mccDto.getTimers()) {
+            for (TimerDto timerDto : mccDto.getTimers()) {
+                map.put(timerDto.getName(), timerDto.getOutPutCompareRegister());
+            }
+        }
+
+        //loop ports
+        if(null!=mccDto.getIoPort()) {
+            for (PORTnDto porTnDto : mccDto.getIoPort()) {
+                map.put(porTnDto.getPortName(), (int) porTnDto.getValue());
+            }
+        }
+
+        //This is outbound messages, so ADC's are never written, only read
+        return map;
     }
 }

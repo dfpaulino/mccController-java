@@ -92,7 +92,7 @@ public class ServiceIOTest {
         buffer1[33]=(byte)0x90;buffer1[34]=(byte)0x00; //adc6
         buffer1[35]=(byte)0x91;buffer1[36]=(byte)0x00; //adc7
         */
-        Atmega mcu=mccService.getMcuDetailsByAddress("0x0a");
+        Atmega mcu=mccService.getMcuDetailsByAddress("0a");
         List<ADC> adcList=mcu.getAdcs();
         boolean fullMatch=false;
         for (ADC adc:adcList) {
@@ -135,8 +135,8 @@ public class ServiceIOTest {
     }
 
     private void create2Mcu(){
-        Atmega mcu= MccFactory.createMcc("0x0a",AtmegaType.ATMEGA32,"ATMEGA1");
-        Atmega mcu2= MccFactory.createMcc("0xfa",AtmegaType.ATMEGA32,"ATMEGA1");
+        Atmega mcu= MccFactory.createMcc("0a",AtmegaType.ATMEGA32,"ATMEGA1");
+        Atmega mcu2= MccFactory.createMcc("fa",AtmegaType.ATMEGA32,"ATMEGA1");
         mccService.createMcu(mcu);
         mccService.createMcu(mcu2);
 

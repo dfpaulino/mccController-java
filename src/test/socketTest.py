@@ -32,7 +32,7 @@ buffer1[10]=128  #timer1
 buffer1[11]=0x85
 buffer1[12]=127        #timer2
 buffer1[13]=0x86
-buffer1[14]=0x00 #porta
+buffer1[14]=0x01 #porta
 buffer1[15]=0x87
 buffer1[16]=0xaf #portb
 buffer1[17]=0x8a
@@ -41,6 +41,14 @@ buffer1[19]=0x00
 
 
 s.sendall(buffer1)
+print "data sent...witing for receive"
+data=s.recv(100)
+
+print 'Received'
+
+for i in data:
+    print hex(ord(i))
+
 s.close()
 print "Socket closed"
 
