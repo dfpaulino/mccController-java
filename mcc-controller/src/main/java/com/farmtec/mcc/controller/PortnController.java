@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,9 @@ import java.util.List;
 @RequestMapping("/port")
 @Setter
 public class PortnController {
+
+    @Value("${controller.update.mode:PROD}")
+    String controller_mode;
 
     @Autowired
     private PortnService portnService;
@@ -43,9 +47,7 @@ public class PortnController {
     {
         byte value=(byte) (0xFF&Integer.valueOf(strValue,16));
         try {
-
-
-            try {
+            if(controller_mode.equals("PROD")) {
                 AtmegaDto mccDto = new AtmegaDto();
                 mccDto.setAddress(portnService.getInfo(id).getAtmega().getAddress());
                 List<PORTnDto> porTnDtos = new ArrayList<PORTnDto>(1);
@@ -53,14 +55,16 @@ public class PortnController {
                 porTnDto.setValue(value);
                 porTnDtos.add(porTnDto);
                 mccDto.setIoPort(porTnDtos);
-                serviceIoSender.sendMessage(mccDto,Operation.UpdateMcu);
-            }catch (Exception e){
-                logger.error("Cant update Port id "+id+" for mcu");
-                e.printStackTrace();
-            }
-            PORTn porTn = portnService.updateValue(id, value);
-            return new ResponseEntity<PORTnDto>(MccEntityToDto.portEntityToPortDto(porTn), HttpStatus.OK);
+                if (!serviceIoSender.sendMessage(mccDto, Operation.UpdateMcu)) {
+                    logger.error("Error sending update message...");
+                    throw new ControllerExceptionHandler("Update MCU Failed",HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+                return new ResponseEntity<PORTnDto>(porTnDto, HttpStatus.OK);
 
+            }else {
+                PORTn porTn = portnService.updateValue(id, value);
+                return new ResponseEntity<PORTnDto>(MccEntityToDto.portEntityToPortDto(porTn), HttpStatus.OK);
+            }
         }catch (MccServiceException mse)
         {
              throw new ControllerExceptionHandler("No Port available",HttpStatus.NOT_FOUND);
