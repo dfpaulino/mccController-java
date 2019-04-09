@@ -238,7 +238,7 @@ public class MccServiceImpl implements MccService {
     /*
     All methods should be Transactional as the repository is configuread as Lazy featch
      */
-
+    @Transactional
     public void deleteMcc(int id)
     {
         try{
