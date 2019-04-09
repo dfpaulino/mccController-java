@@ -6,6 +6,8 @@ import com.farmtec.mcc.models.BaseModel;
 import com.farmtec.mcc.models.modules.IO.PORTn;
 import com.farmtec.mcc.models.modules.adc.ADC;
 import com.farmtec.mcc.models.modules.timer.Timer;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ public class AtmegaDto extends BaseDto {
 
     private String name;
 
+    @JsonIgnore
     private String address;
 
     private AtmegaType model;
@@ -33,6 +36,13 @@ public class AtmegaDto extends BaseDto {
 
     private List<AdcDto> adcs;
 
+    @JsonGetter("address")
+    public String address() {
+        if(0<=this.address.indexOf("0x"))
+            return this.address;
+        else
+            return "0x"+this.address;
+    }
 
     public AtmegaDto(AtmegaDto atmega)
     {

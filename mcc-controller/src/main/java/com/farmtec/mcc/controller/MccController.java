@@ -63,7 +63,7 @@ public class MccController {
     @RequestMapping(method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<AtmegaDto> addMcc(@RequestBody AtmegaDto mccDto)
     {
-        Atmega mcc=mccService.createMcu(MccFactory.createMcc(mccDto.getAddress(),mccDto.getModel(),mccDto.getName()));
+        Atmega mcc=mccService.createMcu(MccFactory.createMcc(mccDto.getAddress().replace("0x",""),mccDto.getModel(),mccDto.getName()));
 
         return  new ResponseEntity<>(MccEntityToDto.mccEntityToDtoSimple(mcc),HttpStatus.OK);
     }
