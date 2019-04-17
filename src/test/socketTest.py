@@ -7,6 +7,26 @@ This is a temporary script file.
 """
 
 import socket
+import time
+import threading
+
+
+#class readThread (threading.Thread):
+#    def __init__(self, threadID, name, mySocket):
+#      threading.Thread.__init__(self)
+#      self.threadID = threadID
+#      self.name = name
+#      self.mySocket = mySocket
+#   def run(self):
+#      print "Starting " + self.name
+#      print_time(self.name, 5, self.mySocket)
+#      print "Exiting " + self.name
+
+#def readSocket(name,mySocket)
+
+
+
+
 
 host="127.0.0.1"
 port=6869

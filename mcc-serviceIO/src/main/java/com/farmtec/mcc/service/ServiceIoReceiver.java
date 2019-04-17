@@ -8,6 +8,8 @@ import com.farmtec.mcc.models.Atmega;
 import com.farmtec.mcc.models.modules.IO.PORTn;
 import com.farmtec.mcc.models.modules.adc.ADC;
 import com.farmtec.mcc.models.modules.timer.Timer;
+import com.farmtec.mcc.stats.ServiceIOMcuStats;
+import com.farmtec.mcc.stats.ServiceIOStats;
 import com.farmtec.mcc.utils.Util;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
@@ -30,6 +32,8 @@ public class ServiceIoReceiver extends BasicHandler {
     @Autowired
     PortnService portnService;
 
+    @Autowired
+    ServiceIOStats serviceIOStats;
     @Override
     public void execute(Message msg) {
 
@@ -95,11 +99,17 @@ public class ServiceIoReceiver extends BasicHandler {
                         portnService.updateValue(port.getId(),(byte)(0xFF&decodedMessage.get(port.getPortName())) );
                     }
                 }
+                ServiceIOMcuStats serviceIOMcuStats=new ServiceIOMcuStats();
+                serviceIOMcuStats.setAddress(decodedMessage.get("address"));
+                serviceIOMcuStats.setInBoundMessages(1);
+                serviceIOMcuStats.setOutBoundMessages(0);
+                serviceIOMcuStats.setInBytes(msg.getLength());
+                serviceIOMcuStats.setOutBytes(0);
+                serviceIOStats.updateMcuStats(serviceIOMcuStats);
+
             }else{
                 logger.error("No MCU found for address "+Util.IntegerToByteReadableHex(decodedMessage.get("address")));
             }
-
-
         }
     }
 }
