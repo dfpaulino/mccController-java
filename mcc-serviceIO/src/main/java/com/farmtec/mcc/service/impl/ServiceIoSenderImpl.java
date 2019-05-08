@@ -10,13 +10,13 @@ import com.farmtec.mcc.dto.modules.TimerDto;
 import com.farmtec.mcc.service.MccIpAddressResolver;
 import com.farmtec.mcc.service.Operation;
 import com.farmtec.mcc.service.ServiceIoSender;
+import com.farmtec.mcc.stats.ServiceIOMcuStats;
+import com.farmtec.mcc.stats.ServiceIOStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotNull;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +31,8 @@ public class ServiceIoSenderImpl implements ServiceIoSender {
 
     @Autowired
     MccIpAddressResolver mccIpAddressResolver;
+    @Autowired
+    ServiceIOStats serviceIOStats;
 
     @Override
     public boolean sendMessage(AtmegaDto mccDto, Operation operation) {
@@ -43,6 +45,15 @@ public class ServiceIoSenderImpl implements ServiceIoSender {
 
             frame.encodeMessage(Byte.valueOf(mccDto.getAddress(),16),Operation.UpdateMcu.getValue(),map);
             logger.debug("Sending message ["+((MessageEncoder) frame).printBuffer()+"]");
+
+            ServiceIOMcuStats serviceIOMcuStats=new ServiceIOMcuStats();
+            serviceIOMcuStats.setAddress(Byte.valueOf(mccDto.getAddress(),16));
+            serviceIOMcuStats.setInBoundMessages(0);
+            serviceIOMcuStats.setOutBoundMessages(1);
+            serviceIOMcuStats.setInBytes(0);
+            serviceIOMcuStats.setOutBytes(frame.getLength());
+            serviceIOStats.updateMcuStats(serviceIOMcuStats);
+
             return messageSenderService.sendMessage(frame,ipAddr);
         }else{
             return false;
