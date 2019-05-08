@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Component
 @NoArgsConstructor
-public class ConnectionManager implements  Runnable{
+public class ConnectionManager{
     Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
 
     @Value("${io.service.max.connections:5}")
@@ -56,7 +57,6 @@ public class ConnectionManager implements  Runnable{
         connectionManagerExecutorService.setMaxPoolSize(100);
         connectionManagerExecutorService.setThreadNamePrefix("cnx-pool-");
         connectionManagerExecutorService.initialize();
-        this.submitTaskToPool(this);
     }
     //Bean destroy
     public void close(){
@@ -111,8 +111,8 @@ public class ConnectionManager implements  Runnable{
 
     }
 
-    @Override
-    public void run() {
+    @Scheduled(fixedDelayString = "10000")
+    public void runMonitor() {
         try {
             while (true){
                 Thread.sleep(CNX_MONITOR_POLL_INTERVAL);
