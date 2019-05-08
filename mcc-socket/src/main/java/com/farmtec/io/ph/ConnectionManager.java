@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -44,12 +45,17 @@ public class ConnectionManager implements  Runnable{
     /**Thr pool for cnx. Each incomming connection will be managed by 1 thread::Connection
      * An additional thr will be used to monitor the current connection
      */
-    private ExecutorService connectionManagerExecutorService;
+    private ThreadPoolTaskExecutor connectionManagerExecutorService;
 
     //Bean initialization
     @PostConstruct
     public void init(){
-        connectionManagerExecutorService = Executors.newFixedThreadPool(MAX_CNX+2);
+
+        connectionManagerExecutorService=new ThreadPoolTaskExecutor();
+        connectionManagerExecutorService.setCorePoolSize(MAX_CNX+2);
+        connectionManagerExecutorService.setMaxPoolSize(100);
+        connectionManagerExecutorService.setThreadNamePrefix("cnx-pool-");
+        connectionManagerExecutorService.initialize();
         this.submitTaskToPool(this);
     }
     //Bean destroy
@@ -67,8 +73,7 @@ public class ConnectionManager implements  Runnable{
     {
         logger.info("Processing connection for client "+clientSock.getInetAddress().toString());
 
-        if (connectionManagerExecutorService instanceof ThreadPoolExecutor) {
-            int currentActiveThr=((ThreadPoolExecutor) connectionManagerExecutorService).getActiveCount();
+            int currentActiveThr=connectionManagerExecutorService.getActiveCount();
             logger.info("current Threads in connection-pool is =>"+ currentActiveThr+"");
             if(connectionArrayList.size()>=MAX_CNX){
                 logger.error("Cant accept more connections...MAX CONNECTIONS reached");
@@ -80,7 +85,7 @@ public class ConnectionManager implements  Runnable{
                     connectionManagerExecutorService.execute(connection);
                 }
             }
-        }
+
     }
 
     public void monitorConnectionList()

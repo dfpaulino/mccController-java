@@ -4,11 +4,13 @@ import com.farmtec.io.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.*;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Service
 public class MessageHandlerService{
@@ -22,12 +24,17 @@ public class MessageHandlerService{
      * Handlers must be register so that the message can be processed
      */
     private Map<String,Handler> messageHandlersRegister=new ConcurrentHashMap<String, Handler>(1);
-    private ExecutorService mesageHandlerPool;
+    private ThreadPoolTaskExecutor mesageHandlerPool;
 
     @PostConstruct
     public void init(){
         logger.info("Initiating bean "+this.getClass().getName());
-        mesageHandlerPool= Executors.newFixedThreadPool(POOL_SIZE);
+
+        mesageHandlerPool=new ThreadPoolTaskExecutor();
+        mesageHandlerPool.setCorePoolSize(POOL_SIZE);
+        mesageHandlerPool.setMaxPoolSize(100);
+        mesageHandlerPool.setThreadNamePrefix("io-service-pool-");
+        mesageHandlerPool.initialize();
         this.registerHandler("defaultHandler",new BasicHandler());
     }
 
