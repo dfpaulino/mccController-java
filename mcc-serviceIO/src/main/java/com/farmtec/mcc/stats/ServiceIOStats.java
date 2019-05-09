@@ -26,7 +26,8 @@ public class ServiceIOStats {
     public void updateMcuStats(ServiceIOMcuStats stats){
         ServiceIOMcuStats currentStats=mcuStatsMap.get(stats.getAddress());
         if(null!=currentStats) {
-            currentStats.addStats(stats);
+            //currentStats.addStats(stats);
+            mcuStatsMap.computeIfPresent(stats.getAddress(), (k,v)->stats.addStats2(k,v));
         }
         else{
             currentStats=stats;
