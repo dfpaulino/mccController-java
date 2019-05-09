@@ -24,15 +24,11 @@ public class ServiceIOStats {
     private Map<Integer, ServiceIOMcuStats> mcuStatsMap = new ConcurrentHashMap<Integer, ServiceIOMcuStats>();
 
     public void updateMcuStats(ServiceIOMcuStats stats){
-        ServiceIOMcuStats currentStats=mcuStatsMap.get(stats.getAddress());
-        if(null!=currentStats) {
-            //currentStats.addStats(stats);
+
             mcuStatsMap.computeIfPresent(stats.getAddress(), (k,v)->stats.addStats2(k,v));
-        }
-        else{
-            currentStats=stats;
-        }
-        mcuStatsMap.put(stats.getAddress(),currentStats);
+            mcuStatsMap.computeIfAbsent(stats.getAddress(),(key) ->{System.out.println("Adding Stats for key "+key); ;return stats;} );
+
+
     }
 
     @Scheduled(fixedDelayString = "${stats.period.ms}")
