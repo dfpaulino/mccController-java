@@ -33,6 +33,11 @@
             <artifactId>mcc-serviceIO</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.farmtec</groupId>
+            <artifactId>mcc-cdr</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
 
         <dependency>
