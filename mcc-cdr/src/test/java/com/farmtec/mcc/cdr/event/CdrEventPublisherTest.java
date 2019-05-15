@@ -8,15 +8,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AsynchronousSpringEventsConfig.class)
@@ -33,7 +29,7 @@ public class CdrEventPublisherTest {
 
         Cdr cdr=new Cdr();
         cdr.setAddr("0a");
-        cdr.setCdrType(CdrType.UPDATE_INFO_REQUEST);
+        cdr.setOperation(0x00);
         cdr.setNow(new Date());
         cdr.setData("data1,data2,data3,data4");
         cdrEventPublisher.generateCdr(this,cdr);
