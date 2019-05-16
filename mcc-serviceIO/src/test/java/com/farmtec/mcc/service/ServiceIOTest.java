@@ -4,6 +4,7 @@ import com.farmtec.io.config.EnableIO;
 import com.farmtec.io.message.Message;
 import com.farmtec.io.message.MessageImpl;
 import com.farmtec.io.message.MessageStatus;
+import com.farmtec.mcc.cdr.config.EnableCdr;
 import com.farmtec.mcc.config.ServiceIOConfig;
 import com.farmtec.mcc.dto.modules.AtmegaDto;
 import com.farmtec.mcc.dto.modules.TimerDto;
@@ -42,6 +43,7 @@ import static org.junit.Assert.*;
 //@Import({RepoConfig.class, ServiceIOConfig.class})
 @Import({ServiceIOConfig.class})
 @EnableIO
+@EnableCdr
 public class ServiceIOTest {
 
     @Autowired

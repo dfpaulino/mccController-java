@@ -2,6 +2,8 @@ package com.farmtec.mcc.service;
 
 import com.farmtec.io.handler.BasicHandler;
 import com.farmtec.io.message.Message;
+import com.farmtec.mcc.cdr.dto.Cdr;
+import com.farmtec.mcc.cdr.event.CdrEventPublisher;
 import com.farmtec.mcc.dto.modules.AdcDto;
 import com.farmtec.mcc.dto.modules.TimerDto;
 import com.farmtec.mcc.models.Atmega;
@@ -16,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +37,10 @@ public class ServiceIoReceiver extends BasicHandler {
 
     @Autowired
     ServiceIOStats serviceIOStats;
+
+    @Autowired
+    CdrEventPublisher cdrEventPublisher;
+
     @Override
     public void execute(Message msg) {
 
@@ -49,6 +56,7 @@ public class ServiceIoReceiver extends BasicHandler {
                 search for timerX X= 0 1 2 A
                 timer0 timer1 timer2
                  */
+                Date now=new Date();
                 List<Timer> timers=mcu.getTimers();
                 for (Timer timer:timers) {
                     logger.info("looping timer "+timer.getName());
@@ -63,6 +71,16 @@ public class ServiceIoReceiver extends BasicHandler {
                         timerDto.setId(timer.getId());
                         timerDto.setOutPutCompareRegister(0xFF&decodedMessage.get(timer.getName()));
                         timerService.updateTimerById(timerDto);
+
+                        //Generate Cdr Object
+                        Cdr cdr=new Cdr();
+                        cdr.setAddr(mcu.getAddress());
+                        cdr.setOperation(Operation.ReportUpdate.getValue());
+                        cdr.setNow(now);
+                        cdr.setData("TIMER,"+timer.getName()+","+timerDto.getId()+","+timerDto.getOutPutCompareRegister()+","+timer.getMode().getValue());
+                        //publish event
+                        cdrEventPublisher.generateCdr(this,cdr);
+
                     }
                 }
 
@@ -83,6 +101,15 @@ public class ServiceIoReceiver extends BasicHandler {
                         adcDto.setAdcId(adc.getAdcId());
                         adcDto.setValue(decodedMessage.get(key));
                         adcService.updateAcd(adcDto);
+
+                        //Generate Cdr Object
+                        Cdr cdr=new Cdr();
+                        cdr.setAddr(mcu.getAddress());
+                        cdr.setOperation(Operation.UpdateMcu.getValue());
+                        cdr.setNow(new Date());
+                        cdr.setData("ADC,"+adc.getAdcId()+","+adc.getId()+","+adcDto.getValue());
+                        //publish event
+                        cdrEventPublisher.generateCdr(this,cdr);
                     }
                 }
                 /*
@@ -97,6 +124,16 @@ public class ServiceIoReceiver extends BasicHandler {
                             logger.debug("Found port  " +port.getPortName()+ "in payload...going to update with value [" + Util.IntegerToByteReadableHex(decodedMessage.get(port.getPortName())) + "]");
                         }
                         portnService.updateValue(port.getId(),(byte)(0xFF&decodedMessage.get(port.getPortName())) );
+
+                        //Generate Cdr Object
+                        Cdr cdr=new Cdr();
+                        cdr.setAddr(mcu.getAddress());
+                        cdr.setOperation(Operation.UpdateMcu.getValue());
+                        cdr.setNow(new Date());
+                        cdr.setData("PORT,"+port.getPortName()+","+port.getId()+","+(0xFF&decodedMessage.get(port.getPortName()))+","+port.getDdb());
+                        //publish event
+                        cdrEventPublisher.generateCdr(this,cdr);
+
                     }
                 }
                 ServiceIOMcuStats serviceIOMcuStats=new ServiceIOMcuStats();

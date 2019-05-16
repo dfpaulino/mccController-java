@@ -62,6 +62,7 @@ buffer1[19]=0x00
 
 s.sendall(buffer1)
 print "data sent...witing for receive"
+
 data=s.recv(100)
 
 print 'Received'

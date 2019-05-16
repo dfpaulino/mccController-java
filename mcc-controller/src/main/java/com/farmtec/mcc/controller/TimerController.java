@@ -1,5 +1,7 @@
 package com.farmtec.mcc.controller;
 
+import com.farmtec.mcc.cdr.dto.Cdr;
+import com.farmtec.mcc.cdr.event.CdrEventPublisher;
 import com.farmtec.mcc.controller.exception.ControllerExceptionHandler;
 import com.farmtec.mcc.dto.modules.AtmegaDto;
 import com.farmtec.mcc.dto.modules.PORTnDto;
@@ -21,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -33,6 +36,9 @@ public class TimerController {
 
     @Autowired
     ServiceIoSender serviceIoSender;
+
+    @Autowired
+    CdrEventPublisher cdrEventPublisher;
 
     @Value("${controller.update.mode:PROD}")
     String controller_mode;
@@ -59,6 +65,15 @@ public class TimerController {
                 logger.error("Error sending update message...");
                 throw new ControllerExceptionHandler("Update MCU Failed",HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            //Generate Cdr Object
+            Cdr cdr=new Cdr();
+            cdr.setAddr(mccDto.getAddress());
+            cdr.setOperation(Operation.UpdateMcu.getValue());
+            cdr.setNow(new Date());
+            cdr.setData("TIMER,"+timerDto1.getName()+","+timerDto1.getId()+","+timerDto1.getOutPutCompareRegister()+","+timerDto1.getMode().getValue());
+            //publish event
+            cdrEventPublisher.generateCdr(this,cdr);
+
             return new ResponseEntity<TimerDto>(MccEntityToDto.timerEntityToTimerDto(timer), HttpStatus.OK);
         }
         else {

@@ -1,5 +1,8 @@
 package com.farmtec.mcc.controller;
 
+import com.farmtec.mcc.cdr.dto.Cdr;
+import com.farmtec.mcc.cdr.event.CdrEvent;
+import com.farmtec.mcc.cdr.event.CdrEventPublisher;
 import com.farmtec.mcc.controller.exception.ControllerExceptionHandler;
 import com.farmtec.mcc.dto.modules.AdcDto;
 import com.farmtec.mcc.dto.modules.AtmegaDto;
@@ -18,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -33,6 +37,10 @@ public class PortnController {
 
     @Autowired
     ServiceIoSender serviceIoSender;
+
+    @Autowired
+    CdrEventPublisher cdrEventPublisher;
+
     Logger logger = LoggerFactory.getLogger(PortnController.class);
 
 
@@ -59,6 +67,15 @@ public class PortnController {
                     logger.error("Error sending update message...");
                     throw new ControllerExceptionHandler("Update MCU Failed",HttpStatus.INTERNAL_SERVER_ERROR);
                 }
+                //Generate Cdr Object
+                Cdr cdr=new Cdr();
+                cdr.setAddr(mccDto.getAddress());
+                cdr.setOperation(Operation.UpdateMcu.getValue());
+                cdr.setNow(new Date());
+                cdr.setData("PORT,"+porTnDto.getPortName()+","+porTnDto.getId()+","+porTnDto.getValue()+","+porTnDto.getDdb());
+                //publish event
+                cdrEventPublisher.generateCdr(this,cdr);
+
                 return new ResponseEntity<PORTnDto>(porTnDto, HttpStatus.OK);
 
             }else {

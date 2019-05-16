@@ -68,4 +68,10 @@
     <logger name="com.farmtec.mcc.stats" level="info" additivity="false">
                 <appender-ref ref="ServiceStats" />
     </logger>
+
+    <logger name="com.farmtec.mcc.cdr" level="info" additivity="false">
+                <appender-ref ref="logs" />
+                <appender-ref ref="Console" />
+    </logger> 
+
         </configuration>

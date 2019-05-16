@@ -1,17 +1,21 @@
 package com.farmtec.mcc.controller;
 
+import com.farmtec.mcc.cdr.dto.Cdr;
+import com.farmtec.mcc.cdr.event.CdrEventPublisher;
 import com.farmtec.mcc.controller.exception.ControllerExceptionHandler;
 import com.farmtec.mcc.service.MccService;
 import com.farmtec.mcc.dto.modules.AtmegaDto;
 import com.farmtec.mcc.dto.utils.MccEntityToDto;
 import com.farmtec.mcc.models.Atmega;
 import com.farmtec.mcc.models.factory.MccFactory;
+import com.farmtec.mcc.service.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +25,9 @@ public class MccController {
 
     @Autowired
     MccService mccService;
+
+    @Autowired
+    CdrEventPublisher cdrEventPublisher;
 
 
     @RequestMapping(value="/all",method = RequestMethod.GET,produces= MediaType.APPLICATION_JSON_VALUE)
@@ -64,6 +71,15 @@ public class MccController {
     public ResponseEntity<AtmegaDto> addMcc(@RequestBody AtmegaDto mccDto)
     {
         Atmega mcc=mccService.createMcu(MccFactory.createMcc(mccDto.getAddress().replace("0x",""),mccDto.getModel(),mccDto.getName()));
+
+        //Generate Cdr Object
+        Cdr cdr=new Cdr();
+        cdr.setAddr(mccDto.getAddress());
+        cdr.setOperation(Operation.UpdateMcu.getValue());
+        cdr.setNow(new Date());
+        cdr.setData("MCU,"+mcc.getName()+","+mcc.getId());
+        //publish event
+        cdrEventPublisher.generateCdr(this,cdr);
 
         return  new ResponseEntity<>(MccEntityToDto.mccEntityToDtoSimple(mcc),HttpStatus.OK);
     }
