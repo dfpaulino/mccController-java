@@ -105,7 +105,7 @@ public class ServiceIoReceiver extends BasicHandler {
                         //Generate Cdr Object
                         Cdr cdr=new Cdr();
                         cdr.setAddr(mcu.getAddress());
-                        cdr.setOperation(Operation.UpdateMcu.getValue());
+                        cdr.setOperation(Operation.ReportUpdate.getValue());
                         cdr.setNow(new Date());
                         cdr.setData("ADC,"+adc.getAdcId()+","+adc.getId()+","+adcDto.getValue());
                         //publish event
@@ -128,7 +128,7 @@ public class ServiceIoReceiver extends BasicHandler {
                         //Generate Cdr Object
                         Cdr cdr=new Cdr();
                         cdr.setAddr(mcu.getAddress());
-                        cdr.setOperation(Operation.UpdateMcu.getValue());
+                        cdr.setOperation(Operation.ReportUpdate.getValue());
                         cdr.setNow(new Date());
                         cdr.setData("PORT,"+port.getPortName()+","+port.getId()+","+(0xFF&decodedMessage.get(port.getPortName()))+","+port.getDdb());
                         //publish event

@@ -74,7 +74,7 @@ public class MccController {
 
         //Generate Cdr Object
         Cdr cdr=new Cdr();
-        cdr.setAddr(mccDto.getAddress());
+        cdr.setAddr(mcc.getAddress());
         cdr.setOperation(Operation.UpdateMcu.getValue());
         cdr.setNow(new Date());
         cdr.setData("MCU,"+mcc.getName()+","+mcc.getId());
