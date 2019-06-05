@@ -1,0 +1,17 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Fri May 31 11:14:26 2019
+
+@author: dpaulino
+"""
+import binascii
+from  core.McuCluster import McuCluster
+
+
+ 
+print "hello world"
+cluster=McuCluster("myCluster")
+cluster.setCluster(10)
+for i in range (10):
+    print binascii.hexlify(cluster.cluster[i].getBuffer())
