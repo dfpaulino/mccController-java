@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.annotation.Rollback;
 
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,11 +30,13 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 @SpringBootTest(classes = MccRepository.class)
+//@ContextConfiguration(classes=MccRepository.class)
 @EnableAutoConfiguration
 @Transactional
 @Rollback(false)
 @RunWith(SpringRunner.class)
-@DataJpaTest
+//
+//@DataJpaTest
 @Import({RepoConfig.class})
 public class mccRepositoryTest {
 
