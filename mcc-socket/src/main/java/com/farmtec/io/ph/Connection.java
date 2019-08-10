@@ -96,9 +96,10 @@ public class Connection implements Runnable
         while(true){
             try {
                 bytesRead=in.read(socketInBuffer);
-                if(-1==bytesRead){break;}
+                if(-1==bytesRead){logger.error("fail to read by");break;}
 
                 this.bytesIn+=bytesRead;
+                logger.debug("reading bytes from input Length "+bytesRead+"buffer["+socketInBuffer+"]");
                 int nextSrcPos=packet.addBytes(socketInBuffer,bytesRead,0);
                 /*
                  * here we can he 2 options
@@ -139,22 +140,26 @@ public class Connection implements Runnable
                     if(!messageHandlerService.processMessage(packet)){
                         logger.error("Message not processed...");
                     }
+                    //one message submited create new message for next iteration
+                    packet=new MessageImpl(clientSocket);
                     while(nextSrcPos>0 )
                     {
-                        packet=new MessageImpl(clientSocket);
                         nextSrcPos=packet.addBytes(socketInBuffer,bytesRead,nextSrcPos);
                         if(MessageStatus.COMPLETE==packet.getMessageStatus()||MessageStatus.COMPLETE_EXCEDED==packet.getMessageStatus()){
+
                             if(logger.isDebugEnabled()){
-                                logger.debug("current packet status["+packet.getMessageStatus()+"]...submitting message to processor");
+                                logger.debug("current packet status["+packet.getMessageStatus()+"]...submitting message to processor nextPos "+nextSrcPos+" packet "+packet.toString() );
                             }
                             if(!messageHandlerService.processMessage(packet)){
                                 logger.error("Message not processed...");
                             }
+                            //one message submited create new message for next iteration
+                            packet=new MessageImpl(clientSocket);
                         }else {
                             logger.debug("Scenario Exceeded, current pack Incomplete...waiting for next read");
                         }
                     }
-                }
+                }else{logger.error("Unknown condition status "+packet.getMessageStatus()+" nextPos "+nextSrcPos+" object "+packet.toString());}
 
             }catch (IOException ioe){
                 logger.error("Error reading from Client ["+this.clientSocket.toString()+"] closing connections");
