@@ -7,16 +7,27 @@ Created on Wed Jun  5 13:53:48 2019
 """
 
 import requests
-import json
-import threading
+
+from threading import Lock,Thread
 import datetime
-class HttpRequest(threading.Thread):
+
+
+class HttpRequest():
+    
+    lock = Lock()
+    count = 0
     
     def __init__(self,uri,method):
-        threading.Thread.__init__(self)
+        #threading.Thread.__init__(self)
         self.uri=uri
         self.method=method
-    
+
+    def incrementCount():
+        self.lock.acquire()
+        self.count+=1
+        self.lock.release()
+        
+        
     def doPost(self,body):
         headers = {'Content-Type': 'application/json'}
         reqStart = datetime.datetime.now()
@@ -26,9 +37,10 @@ class HttpRequest(threading.Thread):
         print ('Response Time: ' + (str(tdelta.total_seconds() * 1000)) + ' ms')
         if response.status_code == requests.codes.ok:
             print ('Response code '+ str(requests.codes.ok))
-            print response.json()
+            print ('Created ID=' + str(response.json()['id']))
         else:
             print (response.status_code)
+        return response
             
     def doGet(self):
         headers = {'Accept': 'application/json'}
@@ -44,11 +56,11 @@ class HttpRequest(threading.Thread):
         else:
             print ('Error Response code '+response.status_code)
             
-    def run(self):
+    def execute(self):
         if self.method == 'GET':
             self.doGet()
         elif self.method == 'POST':
-            self.doPost()
+            self.doPost(self.body)
             
             
         

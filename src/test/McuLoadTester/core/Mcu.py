@@ -7,7 +7,7 @@ Created on Fri May 31 09:38:35 2019
 """
 
 class Mcu:
-    model = 'Atmega321'
+    model = 'Atmega32'
     
     def __init__(self,name,address):
         self.name=name

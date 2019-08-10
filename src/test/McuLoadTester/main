@@ -7,11 +7,40 @@ Created on Fri May 31 11:14:26 2019
 """
 import binascii
 from  core.McuCluster import McuCluster
+from rest.RestCreateMcu import RestCreateMcu
+from socket1.Socket import Socket
+import time
 
+def main():
+    print "hello world"
+    cluster=McuCluster("myCluster")
+    cluster.setCluster(255)
+    for i in range (10):
+        print binascii.hexlify(cluster.cluster[i].getBuffer())
+    restMcu=RestCreateMcu(cluster)
+    restMcu.setThreadPool(3)
+    restMcu.createMcus();
+    time.sleep(60)
+    
+    cluster.cluster[0].incrementBufferValues()
+    socket=Socket("127.0.0.1",6869)
+    socket.connect()
+    socket2=Socket("127.0.0.1",6869)
+    socket2.connect()
+    socket.sendPayload(cluster.cluster[0].getBuffer())
+    for x in range(254):
+        for i in range (255):
+            #time.sleep(0.06)
+            print ("loop "+str(x)+ "for item "+str(i))
+            cluster.cluster[i].incrementBufferValues()
+            socket2.sendPayload(cluster.cluster[i].getBuffer())
+            print binascii.hexlify(cluster.cluster[i].getBuffer())
+    
+    time.sleep(10)
+    socket.close()
+    socket2.close()
+    
+    
 
- 
-print "hello world"
-cluster=McuCluster("myCluster")
-cluster.setCluster(10)
-for i in range (10):
-    print binascii.hexlify(cluster.cluster[i].getBuffer())
+if __name__=="__main__":
+    main()
