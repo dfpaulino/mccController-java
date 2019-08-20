@@ -17,7 +17,7 @@
         <module>mcc-controller</module>
         <module>mcc-serviceIO</module>
         <module>mcc-cdr</module>
-        <!--module>mcc-socket</module-->
+        <module>mcc-socket</module>
     </modules>
 
 

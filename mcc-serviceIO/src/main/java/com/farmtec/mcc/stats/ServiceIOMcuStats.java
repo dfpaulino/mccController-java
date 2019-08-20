@@ -24,7 +24,7 @@ public class ServiceIOMcuStats {
         stats.inBoundMessages+=this.inBoundMessages;
         stats.outBytes+=this.outBytes;
         stats.outBoundMessages+=this.outBoundMessages;
-        System.out.println("Updating Stats for key "+key);
+        //System.out.println("Updating Stats for key "+key);
         return stats;
     }
 }

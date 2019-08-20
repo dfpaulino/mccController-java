@@ -48,9 +48,14 @@ public class ServiceIoReceiver extends BasicHandler {
         if (logger.isInfoEnabled())
             logger.info("Processing message "+ msg.toString());
         // this is the MCU sending its report Update
+        long start=System.currentTimeMillis();
         if(Operation.ReportUpdate.getValue()==(byte)( decodedMessage.get("operation")&0xFF)){
             logger.info("Processing ReportUpdate for MCU Addr "+ Util.IntegerToByteReadableHex(decodedMessage.get("address")) );
+            long a=System.currentTimeMillis();
             Atmega mcu=mccService.getMcuDetailsByAddress(Util.IntegerToByteReadableHex(decodedMessage.get("address")));
+            long b=System.currentTimeMillis();
+            long x=b-a;
+            logger.info("MCU Addr["+Util.IntegerToByteReadableHex(decodedMessage.get("address"))+"] GET took ["+x+"]ms");
             if(null!=mcu){
                 /*
                 search for timerX X= 0 1 2 A
@@ -100,7 +105,11 @@ public class ServiceIoReceiver extends BasicHandler {
                         adcDto.setId(adc.getId());
                         adcDto.setAdcId(adc.getAdcId());
                         adcDto.setValue(decodedMessage.get(key));
+                        long q=System.currentTimeMillis();
                         adcService.updateAcd(adcDto);
+                        long w=System.currentTimeMillis();
+                        long e=w-q;
+                        logger.info("MCU Addr["+Util.IntegerToByteReadableHex(decodedMessage.get("address"))+"] update ADC took ["+e+"]ms");
 
                         //Generate Cdr Object
                         Cdr cdr=new Cdr();
@@ -148,5 +157,9 @@ public class ServiceIoReceiver extends BasicHandler {
                 logger.error("No MCU found for address "+Util.IntegerToByteReadableHex(decodedMessage.get("address")));
             }
         }
+        long end=System.currentTimeMillis();
+        long delta=end-start;
+        logger.info("MCU Addr["+Util.IntegerToByteReadableHex(decodedMessage.get("address"))+"] Update took ["+delta+"]ms");
+
     }
 }

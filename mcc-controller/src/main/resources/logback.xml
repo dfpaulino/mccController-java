@@ -62,23 +62,22 @@
             <!-- LOG everything at INFO level -->
     <root level="warn">
         <appender-ref ref="logs" />
-        <appender-ref ref="Console" />
+        <!--appender-ref ref="Console" /-->
     </root>
          
             <!-- LOG "com.farmtec.mcc" at TRACE level -->
     <logger name="com.farmtec.mcc.controller" level="debug" additivity="false">
         <appender-ref ref="logs" />
-        <appender-ref ref="Console" />
+        <!--appender-ref ref="Console" /-->
     </logger>
-
     <logger name="com.farmtec.mcc.service" level="debug" additivity="false">
                 <appender-ref ref="logs" />
-                <appender-ref ref="Console" />
+                <!--appender-ref ref="Console" /-->
     </logger>
 
     <logger name="com.farmtec.io" level="debug" additivity="false">
                 <appender-ref ref="logs" />
-                <appender-ref ref="Console" />
+                <!--appender-ref ref="Console" /-->
     </logger> 
 
     <logger name="com.farmtec.mcc.stats" level="info" additivity="false">
@@ -87,7 +86,7 @@
 
     <logger name="com.farmtec.mcc.cdr" level="info" additivity="false">
                 <appender-ref ref="ServiceCdr" />
-                <appender-ref ref="Console" />
+                <!--appender-ref ref="Console" /-->
     </logger> 
 
 </configuration>
