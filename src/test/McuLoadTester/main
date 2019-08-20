@@ -19,6 +19,7 @@ def main():
         print binascii.hexlify(cluster.cluster[i].getBuffer())
     restMcu=RestCreateMcu(cluster)
     restMcu.setThreadPool(3)
+
     restMcu.createMcus();
     time.sleep(60)
     
@@ -28,9 +29,9 @@ def main():
     socket2=Socket("127.0.0.1",6869)
     socket2.connect()
     socket.sendPayload(cluster.cluster[0].getBuffer())
-    for x in range(254):
+    for x in range(255):
         for i in range (255):
-            #time.sleep(0.06)
+            time.sleep(0.02)
             print ("loop "+str(x)+ "for item "+str(i))
             cluster.cluster[i].incrementBufferValues()
             socket2.sendPayload(cluster.cluster[i].getBuffer())
