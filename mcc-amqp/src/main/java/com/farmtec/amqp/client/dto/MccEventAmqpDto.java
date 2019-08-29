@@ -8,14 +8,15 @@ import java.io.Serializable;
 
 @Getter @Setter @NoArgsConstructor
 public class MccEventAmqpDto implements Serializable {
-    String address;
+    String mccAddress;
     String module;
     String moduleId;
+    int id;
     int value;
 
     @Override
     public String toString(){
-        return "{ \"address\":"+address+",\n\"module\":"+module+",\n \"moduleId\":"+moduleId+",\n \"value\":"+value+"}";
+        return "{ \"address\":"+mccAddress+",\n\"module\":"+module+",\n \"moduleId\":"+moduleId+",\n \"value\":"+value+",\n \"id\":"+id+"}";
     }
 
 }
