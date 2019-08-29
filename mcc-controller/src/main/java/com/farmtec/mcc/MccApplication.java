@@ -1,5 +1,6 @@
 package com.farmtec.mcc;
 
+import com.farmtec.amqp.EnableAMQP;
 import com.farmtec.io.config.EnableIO;
 import com.farmtec.mcc.cdr.config.EnableCdr;
 import com.farmtec.mcc.config.ServiceIOConfig;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Import;
 @Import({RepoConfig.class,ServiceIOConfig.class})
 @EnableIO
 @EnableCdr
+@EnableAMQP
 public class MccApplication {
 
 	public static void main(String[] args) {

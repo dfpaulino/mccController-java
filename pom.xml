@@ -18,6 +18,7 @@
         <module>mcc-serviceIO</module>
         <module>mcc-cdr</module>
         <module>mcc-socket</module>
+        <module>mcc-amqp</module>
     </modules>
 
 

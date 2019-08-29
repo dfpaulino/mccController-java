@@ -29,7 +29,7 @@ def main():
     socket2=Socket("127.0.0.1",6869)
     socket2.connect()
     socket.sendPayload(cluster.cluster[0].getBuffer())
-    for x in range(255):
+    for x in range(2):
         for i in range (255):
             time.sleep(0.02)
             print ("loop "+str(x)+ "for item "+str(i))
