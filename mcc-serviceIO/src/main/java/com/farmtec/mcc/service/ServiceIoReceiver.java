@@ -1,5 +1,7 @@
 package com.farmtec.mcc.service;
 
+import com.farmtec.amqp.client.dto.MccEventAmqpDto;
+import com.farmtec.amqp.client.producer.SendAmqpMessage;
 import com.farmtec.io.handler.BasicHandler;
 import com.farmtec.io.message.Message;
 import com.farmtec.mcc.cdr.dto.Cdr;
@@ -40,6 +42,9 @@ public class ServiceIoReceiver extends BasicHandler {
 
     @Autowired
     CdrEventPublisher cdrEventPublisher;
+
+    @Autowired
+    SendAmqpMessage sendAmqpMessage;
 
     @Override
     public void execute(Message msg) {
@@ -86,6 +91,15 @@ public class ServiceIoReceiver extends BasicHandler {
                         //publish event
                         cdrEventPublisher.generateCdr(this,cdr);
 
+                        //generate Event AMQP
+                        MccEventAmqpDto mccEventAmqpDto=new MccEventAmqpDto();
+                        mccEventAmqpDto.setMccAddress(mcu.getAddress()).
+                                setModuleId(timer.getName()).
+                                setModule("TIMER").
+                                setId(timer.getId()).
+                                setValue(timerDto.getOutPutCompareRegister());
+                        sendAmqpMessage.sendMessage(mccEventAmqpDto);
+
                     }
                 }
 
@@ -119,6 +133,15 @@ public class ServiceIoReceiver extends BasicHandler {
                         cdr.setData("ADC,"+adc.getAdcId()+","+adc.getId()+","+adcDto.getValue());
                         //publish event
                         cdrEventPublisher.generateCdr(this,cdr);
+
+                        //generate Event AMQP
+                        MccEventAmqpDto mccEventAmqpDto=new MccEventAmqpDto();
+                        mccEventAmqpDto.setMccAddress(mcu.getAddress()).
+                                setModuleId("adc"+adc.getAdcId()).
+                                setModule("ADC").
+                                setId(adc.getId()).
+                                setValue(adcDto.getValue());
+                        sendAmqpMessage.sendMessage(mccEventAmqpDto);
                     }
                 }
                 /*
@@ -142,6 +165,14 @@ public class ServiceIoReceiver extends BasicHandler {
                         cdr.setData("PORT,"+port.getPortName()+","+port.getId()+","+(0xFF&decodedMessage.get(port.getPortName()))+","+port.getDdb());
                         //publish event
                         cdrEventPublisher.generateCdr(this,cdr);
+
+                        MccEventAmqpDto mccEventAmqpDto=new MccEventAmqpDto();
+                        mccEventAmqpDto.setMccAddress(mcu.getAddress()).
+                                setModuleId(port.getPortName()).
+                                setModule("PORT").
+                                setId(port.getId()).
+                                setValue((byte)(0xFF&decodedMessage.get(port.getPortName())));
+                        sendAmqpMessage.sendMessage(mccEventAmqpDto);
 
                     }
                 }

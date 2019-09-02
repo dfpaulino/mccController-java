@@ -35,10 +35,10 @@ public class SendAmqpMessageTest {
     @Test
     public void sendMessage() {
         MccEventAmqpDto mccEventAmqpDto=new MccEventAmqpDto();
-        mccEventAmqpDto.setAddress("f0");
-        mccEventAmqpDto.setModule("ModuleName");
-        mccEventAmqpDto.setModuleId("ModuleId");
-        mccEventAmqpDto.setValue(128);
+        mccEventAmqpDto.setMccAddress("f0").
+                setModule("ModuleName").
+                setModuleId("ModuleId").
+                setValue(128);
         try {
             Thread.sleep(1000);
         }catch (Exception e ){}

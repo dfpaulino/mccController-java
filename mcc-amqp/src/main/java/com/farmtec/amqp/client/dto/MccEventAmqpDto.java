@@ -2,11 +2,10 @@ package com.farmtec.amqp.client.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.io.Serializable;
 
-@Getter @Setter @NoArgsConstructor
+@Getter @NoArgsConstructor
 public class MccEventAmqpDto implements Serializable {
     String mccAddress;
     String module;
@@ -18,5 +17,11 @@ public class MccEventAmqpDto implements Serializable {
     public String toString(){
         return "{ \"address\":"+mccAddress+",\n\"module\":"+module+",\n \"moduleId\":"+moduleId+",\n \"value\":"+value+",\n \"id\":"+id+"}";
     }
+
+    public MccEventAmqpDto setMccAddress(String address){this.mccAddress=address; return this;}
+    public MccEventAmqpDto setModule(String module){this.module=module; return this;}
+    public MccEventAmqpDto setModuleId(String moduleId){this.moduleId=moduleId; return this;}
+    public MccEventAmqpDto setId(int id){this.id=id; return this;}
+    public MccEventAmqpDto setValue(int value){this.value=value; return this;}
 
 }

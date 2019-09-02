@@ -1,5 +1,6 @@
 package com.farmtec.mcc.service;
 
+import com.farmtec.amqp.EnableAMQP;
 import com.farmtec.io.config.EnableIO;
 import com.farmtec.io.message.Message;
 import com.farmtec.io.message.MessageImpl;
@@ -44,6 +45,7 @@ import static org.junit.Assert.*;
 @Import({ServiceIOConfig.class})
 @EnableIO
 @EnableCdr
+@EnableAMQP
 public class ServiceIOTest {
 
     @Autowired
