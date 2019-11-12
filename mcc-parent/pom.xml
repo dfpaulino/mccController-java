@@ -36,6 +36,7 @@
         <skipUTs>false</skipUTs>
         <skipITs>true</skipITs>
 
+        <docker.registery>localhost:50000</docker.registery>
     </properties>
 
 

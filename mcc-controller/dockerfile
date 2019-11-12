@@ -1,0 +1,4 @@
+FROM openjdk:8u102-jre
+ARG artifact
+ADD target/$artifact /mcc-controller.jar
+ENTRYPOINT ["java","-jar","mcc-controller.jar"]
