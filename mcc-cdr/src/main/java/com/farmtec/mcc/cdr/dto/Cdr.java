@@ -13,7 +13,7 @@ public class Cdr {
 
     private String addr;
     private int operation;
-private Date  now;
-private String data;
+    private Date  now;
+    private String data;
 
 }
