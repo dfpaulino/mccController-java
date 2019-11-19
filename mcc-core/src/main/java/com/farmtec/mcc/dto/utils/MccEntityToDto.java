@@ -1,5 +1,7 @@
 package com.farmtec.mcc.dto.utils;
 
+import com.farmtec.mcc.dto.mappers.MccMappers;
+import com.farmtec.mcc.dto.mappers.MccMappers$PortIoMapperImpl;
 import com.farmtec.mcc.dto.modules.AdcDto;
 import com.farmtec.mcc.dto.modules.AtmegaDto;
 import com.farmtec.mcc.dto.modules.PORTnDto;
@@ -9,6 +11,7 @@ import com.farmtec.mcc.models.BaseModel;
 import com.farmtec.mcc.models.modules.IO.PORTn;
 import com.farmtec.mcc.models.modules.adc.ADC;
 import com.farmtec.mcc.models.modules.timer.Timer;
+import org.mapstruct.factory.Mappers;
 
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -53,37 +56,19 @@ public class MccEntityToDto {
 
     public static TimerDto timerEntityToTimerDto(Timer entity)
     {
-        TimerDto timer=new TimerDto();
-        timer.setId(entity.getId());
-        timer.setInUse(entity.isInUse());
-        timer.setMode(entity.getMode());
-        timer.setName(entity.getName());
-        timer.setOutPutCompareRegister(entity.getOutPutCompareRegister());
-        timer.setCreated(entity.getCreated());
-        timer.setUpdated(entity.getUpdated());
-        return timer;
+        MccMappers.TimerMapper timerMapper= Mappers.getMapper(MccMappers.TimerMapper.class);
+        return timerMapper.map(entity);
     }
 
     public static AdcDto acdEntityToAdcDto(ADC entity)
     {
-        AdcDto adcDto=new AdcDto();
-        adcDto.setId(entity.getId());
-        adcDto.setAdcId(entity.getAdcId());
-        adcDto.setValue(entity.getValue());
-        adcDto.setInUse(entity.isInUse());
-        return adcDto;
-
+        MccMappers.AdcMapper adcMapper=Mappers.getMapper(MccMappers.AdcMapper.class);
+        return adcMapper.map(entity);
     }
 
     public static PORTnDto portEntityToPortDto(PORTn entity)
     {
-        PORTnDto porTnDto= new PORTnDto();
-        porTnDto.setId(entity.getId());
-        porTnDto.setPortName(entity.getPortName());
-        porTnDto.setDdb(entity.getDdb());
-        porTnDto.setValue(entity.getValue());
-        porTnDto.setInUse(entity.isInUse());
-        return porTnDto;
-
+        MccMappers.PortIoMapper portIoMapper=Mappers.getMapper(MccMappers.PortIoMapper.class);
+        return portIoMapper.map(entity);
     }
 }

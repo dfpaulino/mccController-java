@@ -15,10 +15,6 @@ import javax.persistence.*;
 @Getter @Setter @NoArgsConstructor
 public class ADC extends BaseModel {
 
-    //@GeneratedValue(strategy = GenerationType.AUTO,generator = "native")
-    //@GenericGenerator(name = "native", strategy = "native")
-    //int id;
-
     byte adcId;
     int value;
     boolean inUse;

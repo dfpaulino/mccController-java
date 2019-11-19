@@ -15,12 +15,6 @@ import javax.persistence.*;
 @Table(name = "portn")
 @Getter @Setter @NoArgsConstructor
 public class PORTn extends BaseModel {
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.AUTO)
-    //@GeneratedValue(strategy = GenerationType.AUTO,generator = "native")
-    //@GenericGenerator(name = "native", strategy = "native")
-    //int id;
-
     String portName;
     byte value;
     /*data direction
@@ -33,8 +27,6 @@ public class PORTn extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "atmega_id")
     Atmega atmega;
-
-
 
     public Atmega getAtmega() {
         return atmega;

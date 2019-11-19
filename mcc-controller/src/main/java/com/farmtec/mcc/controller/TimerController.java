@@ -48,7 +48,7 @@ public class TimerController {
     @RequestMapping(method = RequestMethod.PUT,produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TimerDto> updateTimer(@RequestBody TimerDto timerDto)
     {
-
+        //TODO get rid of this!!!
         if(controller_mode.equals("PROD"))
         {
             AtmegaDto mccDto = new AtmegaDto();

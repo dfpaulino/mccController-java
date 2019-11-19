@@ -20,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TimerDto extends BaseDto {
 
-    private int id;
+    //private int id;
     private String name;
 
     private TimerMode mode;
@@ -33,13 +33,13 @@ public class TimerDto extends BaseDto {
     private int pwmFreq;
 
 
-    public int getId() {
+    /*public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
+    }*/
 
     public String getName() {
         return name;
